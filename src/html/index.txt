@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+        <title>Web Service Java Http</title>
+        <style type='text/css'>
+            *{
+                border: 0;
+                padding: 0;
+                margin: 0;
+            }
+            body{
+                background-image: url(https://i.pinimg.com/originals/a1/80/49/a180498e6d7239a20fbac817765bf99f.jpg);
+                background-color: black;
+                background-repeat:no-repeat;
+                background-position:center;
+                background-width: 100%;
+                background-position-y: 0px;
+            }
+            .barraSuperior{
+                border: 1px solid black;
+                background-color: rgba(0, 0, 0, .5);
+            }
+            div.autor{
+                background-color: none;
+            }
+            h1{
+                text-align: center;
+                font-size: 40px;
+                color: white;
+                margin: 30px auto;
+                width: 530px;
+                text-shadow: 2px 2px #0eaf09;
+            }
+            h2{
+                color:white;
+                text-shadow: 2px 2px #FF0000;
+                text-align: center;
+            }
+            h3{
+                color:white;
+                text-shadow: 1px 1px #faea6c;
+            }
+            p{
+                color: black;
+                text-align: justify;
+                box-shadow: 0px 0px 40px rgba(148,117,99,0.2),0px 0px 80px rgba(94, 89, 85, 1);
+                border: 1px solid #4e4d4d;
+                width: 400px;
+            }
+            p:hover{
+                background-color: rgba(0, 0, 0, .1);
+                color: #2be115;
+            }
+            a{
+                text-decoration: none;
+                color: #f3ff01;
+            }
+            a:hover{
+                color: #ff6801;
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='barraSuperior'>
+            <h1>Http con TCP Variante Vegas</h1>
+        </div>
+        <div id='autor'>
+            <br/>
+            <h2>Redes y Sistemas Distribuidos</h2>
+            <br/>
+            <h3>Realizado por: Jheyson Gaona</h3>
+            <br/><br/><br/><br/><br/>
+            <p>El protocolo TCP Vegas es un protocolo de redes a nivel
+               de transporte recientemente desarrollado. Aumenta el tamaño
+               de la ventana hasta que ocurre la pérdida del paquete debida
+               a congestión. Se fundamenta en el estudio del RTT que se
+               estudia en todos los segmentos.</p>
+            <br/>
+            <a href='https://es.wikipedia.org/wiki/TCP_Vegas'>Fuente: https://es.wikipedia.org/wiki/TCP_Vegas</a>
+        </div>
+    </body>
+</html>
