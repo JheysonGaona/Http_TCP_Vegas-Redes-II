@@ -2,7 +2,12 @@ package gui;
 
 import clases.Cliente;
 import com.sun.glass.events.KeyEvent;
+import java.awt.Color;
+import java.awt.Image;
 import java.io.IOException;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  * @author Jheyson Gaona
@@ -15,7 +20,21 @@ public class FrmCliente extends javax.swing.JFrame {
     public FrmCliente() {
         initComponents();
         setLocationRelativeTo(null);
+        config();
+    }
+
+    private void config() {
         this.btnEnviar.setEnabled(false);
+        lblClienteHttp.setOpaque(true);
+        pnlClienteHttp.setBackground(Color.white);
+        cargarImg("/img/redes.jpg", lblImg);
+    }
+
+    private void cargarImg(String link, JLabel etiqueta) {
+        ImageIcon fondo = new ImageIcon(getClass().getResource(link));
+        ImageIcon Automatico = new ImageIcon(fondo.getImage().getScaledInstance(
+                etiqueta.getWidth(), etiqueta.getHeight(), Image.SCALE_DEFAULT));
+        etiqueta.setIcon(Automatico);
     }
 
     private void enviar() {
@@ -24,10 +43,11 @@ public class FrmCliente extends javax.swing.JFrame {
         int puerto = Integer.parseInt(txtPuerto.getText());
         Cliente objClient = new Cliente(solicitudUrl, ip, puerto);
         try {
-            Cliente.main();
+            objClient.cliente();
         } catch (IOException ex) {
-            System.err.println(ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
+
     }
 
     private void activarBtnEnviar(java.awt.event.KeyEvent evt) {
@@ -58,21 +78,28 @@ public class FrmCliente extends javax.swing.JFrame {
         lblSolicitudHttp = new javax.swing.JLabel();
         lblUrl = new javax.swing.JLabel();
         btnEnviar = new javax.swing.JButton();
+        lblImg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Servidor Http");
+        setResizable(false);
 
         pnlClienteHttp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlClienteHttp.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblClienteHttp.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblClienteHttp.setBackground(new java.awt.Color(60, 196, 172));
+        lblClienteHttp.setFont(new java.awt.Font("FreeSerif", 1, 24)); // NOI18N
         lblClienteHttp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblClienteHttp.setText("Cliente Http");
         lblClienteHttp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlClienteHttp.add(lblClienteHttp, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 391, 40));
 
         lblIp.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblIp.setText("Direccion IP Servidor:");
+        lblIp.setForeground(new java.awt.Color(255, 125, 0));
+        lblIp.setText("Direccion IP Servidor: ");
+        pnlClienteHttp.add(lblIp, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 53, -1, -1));
 
         txtIp.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtIp.setText("127.0.0.1");
         txtIp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtIpKeyTyped(evt);
@@ -81,12 +108,14 @@ public class FrmCliente extends javax.swing.JFrame {
                 txtIpKeyReleased(evt);
             }
         });
+        pnlClienteHttp.add(txtIp, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 74, 185, 35));
 
         lblPuerto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblPuerto.setText("Puerto del Servidor:");
+        lblPuerto.setForeground(new java.awt.Color(255, 125, 0));
+        lblPuerto.setText("Puerto del Servidor: ");
+        pnlClienteHttp.add(lblPuerto, new org.netbeans.lib.awtextra.AbsoluteConstraints(236, 53, -1, -1));
 
         txtPuerto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtPuerto.setText("4444");
         txtPuerto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPuertoKeyTyped(evt);
@@ -95,13 +124,20 @@ public class FrmCliente extends javax.swing.JFrame {
                 txtPuertoKeyReleased(evt);
             }
         });
+        pnlClienteHttp.add(txtPuerto, new org.netbeans.lib.awtextra.AbsoluteConstraints(236, 74, 140, 35));
 
         lblSolicitudHttp.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblSolicitudHttp.setForeground(new java.awt.Color(255, 125, 0));
         lblSolicitudHttp.setText("Solicitud Http:");
+        pnlClienteHttp.add(lblSolicitudHttp, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 128, -1, -1));
 
+        lblUrl.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
+        lblUrl.setForeground(new java.awt.Color(254, 254, 254));
         lblUrl.setText("http:// :8080/index");
+        pnlClienteHttp.add(lblUrl, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 127, -1, -1));
 
-        btnEnviar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnEnviar.setBackground(new java.awt.Color(1, 172, 1));
+        btnEnviar.setFont(new java.awt.Font("Liberation Serif", 1, 18)); // NOI18N
         btnEnviar.setText("Enviar Solicitud");
         btnEnviar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnEnviar.addActionListener(new java.awt.event.ActionListener() {
@@ -109,54 +145,8 @@ public class FrmCliente extends javax.swing.JFrame {
                 btnEnviarActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout pnlClienteHttpLayout = new javax.swing.GroupLayout(pnlClienteHttp);
-        pnlClienteHttp.setLayout(pnlClienteHttpLayout);
-        pnlClienteHttpLayout.setHorizontalGroup(
-            pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblClienteHttp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(pnlClienteHttpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlClienteHttpLayout.createSequentialGroup()
-                        .addGroup(pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtIp, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblIp))
-                        .addGap(38, 38, 38)
-                        .addGroup(pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblPuerto)
-                            .addComponent(txtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 16, Short.MAX_VALUE))
-                    .addGroup(pnlClienteHttpLayout.createSequentialGroup()
-                        .addComponent(lblSolicitudHttp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblUrl)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlClienteHttpLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(81, 81, 81))
-        );
-        pnlClienteHttpLayout.setVerticalGroup(
-            pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlClienteHttpLayout.createSequentialGroup()
-                .addComponent(lblClienteHttp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIp)
-                    .addComponent(lblPuerto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlClienteHttpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSolicitudHttp)
-                    .addComponent(lblUrl))
-                .addGap(18, 18, 18)
-                .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        pnlClienteHttp.add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 162, 217, 40));
+        pnlClienteHttp.add(lblImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 390, 172));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -241,6 +231,7 @@ public class FrmCliente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
     private javax.swing.JLabel lblClienteHttp;
+    private javax.swing.JLabel lblImg;
     private javax.swing.JLabel lblIp;
     private javax.swing.JLabel lblPuerto;
     private javax.swing.JLabel lblSolicitudHttp;

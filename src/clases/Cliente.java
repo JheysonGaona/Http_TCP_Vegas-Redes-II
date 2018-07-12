@@ -14,27 +14,27 @@ import javax.swing.JOptionPane;
  */
 public class Cliente {
 
-    static String solicitudUrl;
-    static String ip;
-    static int puerto;
+    public String solicitudUrl;
+    public String ip;
+    public int puerto;
 
     public Cliente(String solicitudUrl, String ip, int puerto) {
-        Cliente.solicitudUrl = solicitudUrl;
-        Cliente.ip = ip;
-        Cliente.puerto = puerto;
+        this.solicitudUrl = solicitudUrl;
+        this.ip = ip;
+        this.puerto = puerto;
     }
 
-    public static void main() throws SocketException, IOException {
-        
+    public void cliente() throws SocketException, IOException {
+
         // creando el datagrama socketClient
         DatagramSocket socketClient = new DatagramSocket();
         // variantes TCP VEGAS
         int cwnd;
-        int lim_cong = 14;
-        int y = 8;
-        int alpha = 10;
-        int beta = 11;
         int con = 0;
+        int lim_cong = 14;
+        int beta = 11;
+        int alpha = 10;
+        int y = 8;
         String subString;
         boolean segmentosEnviados = false;
 
@@ -58,7 +58,7 @@ public class Cliente {
                     con += cwnd;
                     beta = ThreadLocalRandom.current().nextInt((beta - 1), lim_cong);
                     alpha = ThreadLocalRandom.current().nextInt(9, (beta - 1));
-                     // LIMITE
+                    // LIMITE
                 } else if (cwnd >= beta && cwnd < lim_cong) {
                     subString = solicitudUrl.substring(con, (con + (cwnd - 1)));
                     cwnd -= 1;
@@ -79,18 +79,19 @@ public class Cliente {
                 }
                 Thread.sleep(400);
                 byte[] buffer = subString.getBytes();
+                // Envia: array de bytes que contiene el mensaje | longitud del mensaje | dirección ip | número de puerto
                 DatagramPacket datagram = new DatagramPacket(buffer, buffer.length, receiverHost, puerto);
                 socketClient.send(datagram);
                 segmentosEnviados = true;
             }
-        } catch (NumberFormatException | InterruptedException | IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             System.err.println(ex.getMessage());
         }
 
-        // Si la Solicitud
+        // Si la Solicitud se envia.
+        boolean bandera = false;
         if (segmentosEnviados) {
             String mensajeFragmentado = "";
-
             while (true) {
                 byte[] buffer = new byte[1000];
                 DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length);
@@ -101,10 +102,13 @@ public class Cliente {
                 for (int i = 0; i < respuesta.getLength(); i++) {
                     int dato = bin.read();
                     mensajeFragmentado = mensajeFragmentado + (char) dato;
+                    if (mensajeFragmentado.contains("</html>")) {
+                        bandera = true;
+                    }
                 }
-                // imprimir el mensaje fragmentado para saber en que cantidad quemarlo
-                System.out.println("URL a quemar de longuitud: " + mensajeFragmentado.length());
-                if (mensajeFragmentado.length() == 2728) {
+
+                // una vez finalizado abre el navegador con la pagina http
+                if (bandera) {
                     String url = solicitudUrl;
                     // Reconocer sistema operativo para abrir un navegador
                     String osName = System.getProperty("os.name");

@@ -17,47 +17,47 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Servidor {
 
-    static String mensajeCliente = "";
-    static String mensajeFragmentado = "";
     static public int puerto = 4444;
 
-    public static void main() throws IOException, Exception {
+    public void servidor() throws IOException, Exception {
+        String mensajeFragmentado = "";
         // levantamos servicios http
         ServerHttp objServerHttp = new ServerHttp();
-        Grafica objGrafica = new Grafica();
         // llamamos al frame del servidor
         FrmServidor objFrmServidor = new FrmServidor();
         objFrmServidor.setVisible(true);
         // grafica TCP Vegas
+        Grafica objGrafica = new Grafica();
         objGrafica.plotGraph();
         try {
             // verificando IP del servidor
-            String ipServer = InetAddress.getLocalHost().getHostAddress();
+//            String ipServer = InetAddress.getLocalHost().getHostAddress();
             // Levantamos el servidor en un puerto especifico
             DatagramSocket socket = new DatagramSocket(puerto);
             // Detallamos en textarea los detalles del servidor y estado
             FrmServidor.txthTerminal.append("============ Servidor TCP iniciado ============\n\n");
-            FrmServidor.txthTerminal.append("Direccion IP del servidor: " + ipServer + "\n");
+//            FrmServidor.txthTerminal.append("Direccion IP del servidor: " + ipServer + "\n");
             FrmServidor.txthTerminal.append("Puerto de enlace del servidor: " + puerto + "\n\n");
             // El servidor siempre estara escuchando las peticiones del cliente
+            boolean bandera = false;
             while (true) {
                 byte[] buffer = new byte[1000];
                 DatagramPacket datagrama = new DatagramPacket(buffer, buffer.length);
                 socket.receive(datagrama);
                 FrmServidor.txthTerminal.append(">> Petición de : " + datagrama.getAddress()
                         + " - desde el puerto: " + datagrama.getPort() + "\n");
-                mensajeCliente = new String(buffer);
 
                 //Une los datagramas y envia a buscar la url.
                 ByteArrayInputStream input = new ByteArrayInputStream(datagrama.getData());
                 for (int i = 0; i < datagrama.getLength(); i++) {
                     int dato = input.read();
                     mensajeFragmentado = mensajeFragmentado + (char) dato;
+                    if (mensajeFragmentado.contains("/index")) {
+                        bandera = true;
+                    }
                 }
-//                System.out.println(mensajeFragmentado.length());
-                // La solicitud del cliente debe ser: url = http://127.0.0.1:8080/index
-                // en donde 27 equivale a la loguitud de la url
-                if (mensajeFragmentado.length() == 27) {
+                // una vez llegada la solicitud prepara su respuesta
+                if (bandera) {
                     FrmServidor.txthTerminal.append("\n" + ">> Url solicitada: " + mensajeFragmentado + "\n\n");
                     FrmServidor.txthTerminal.append("<< Preparando resultado... Iniciando TCP Vegas \n");
 
@@ -133,6 +133,7 @@ public class Servidor {
                         segm++;
                         Thread.sleep(100);
                         byte[] buff = subString.getBytes();
+                        // Envia: array de bytes que contiene el mensaje | longitud del mensaje | dirección ip | número de puerto
                         DatagramPacket response = new DatagramPacket(buff, buff.length, datagrama.getAddress(), datagrama.getPort());
                         socket.send(response);
                     }
